@@ -1,9 +1,11 @@
 <title>${title}</title>
 
+<body>Redirecting...</body>
+
 <!-- Redirection code -->
 <script>
     // Used to indicate failure
-    const NOT_FOUND = '/404.html';
+    const NOT_FOUND = '/not-found.html';
 
     // Used to ensure URLs have the http/s scheme
     const httpize = url => url.startsWith('http') || url.startsWith('/') ? url : 'http://' + url;
@@ -39,7 +41,10 @@
             const url = new URL(window.location.href);
             if (url.searchParams.has('path')) {
                 window.location.href = httpize(await process(url.searchParams.get('path')));
+            } else if (url.pathname !== '/') {
+                window.location.href = httpize(await process(url.pathname.slice(1)));
             } else {
+                console.log(url)
                 window.location.href = httpize('${root}');
             }
 
